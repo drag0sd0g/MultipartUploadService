@@ -1,0 +1,28 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+}
+
+allprojects {
+    group "com.tools"
+    version "1.0.0-SNAPSHOT"
+}
+
+task copyClientDist(type: Copy) {
+    dependsOn ':file-storage-client:jar'
+    from "file-storage-client/build/libs/file-storage-client-1.0.0-SNAPSHOT.jar"
+    into "${project.buildDir}/fsclient"
+}
+
+task copyServerDist(type: Copy) {
+    dependsOn ':file-storage-server:jar'
+    from "file-storage-server/build/file-storage-server-1.0.0-SNAPSHOT.jar"
+    into "${project.buildDir}/fsserver"
+}
+
+task distribute {
+    dependsOn 'copyClientDist'
+    dependsOn 'copyServerDist'
+}
