@@ -33,10 +33,10 @@ java -jar file-storage-server-1.0.0-SNAPSHOT.jar
 its swagger page at http://localhost:8080/q/swagger-ui/ . You will also find the REST API documentation here with 
 the explanation for each status code returned by each endpoint
 - Several properties are kept in the _application.properties_ file under _src/main/resources_ but there are also plenty 
-default properties assumed by Quarkus. If you wish to override some of these (for example the port number), you can do 
+default properties assumed by Quarkus. If you wish to override some of these (for example the port number or host), you can do 
 so by passing the override with _-D_ args to the jar e.g.
 ```shell script
-java -Dquarkus.http.port=8085 -jar file-storage-server-1.0.0-SNAPSHOT.jar
+java -Dquarkus.http.host="192.168.11.7" -Dquarkus.http.port=8085 -jar file-storage-server-1.0.0-SNAPSHOT.jar
 ```
 - By default, Quarkus framework stores _multipart/form-data_ files in a temporary location from where they will be copied to
 a designated persistent storage folder (called _data-server_). Quarkus automatically removes the files from the 
@@ -71,7 +71,7 @@ To the usage command above, this CLI needs exactly one of the options:
 - By default, the client will attempt to find the server at http://localhost:8080. You can however choose to overwrite 
 this value by passing the JVM arg _-Dfsserver.api.rootUrl_ to the CLI executable e.g.
 ```shell script
-java -Dfsserver.api.rootUrl="http://127.0.0.1:8085" -jar file-storage-client-1.0.0-SNAPSHOT.jar -l
+java -Dfsserver.api.rootUrl="http://192.168.11.7:8085" -jar file-storage-client-1.0.0-SNAPSHOT.jar -l
 ```
 
 ## Testing
