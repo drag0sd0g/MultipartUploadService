@@ -27,7 +27,7 @@ public class FileStorageResourceTest {
   public void testListingFilesWhenUploadedFilesExist() throws IOException {
     Set<String> uploadedFiles = Set.of("a.txt", "b.gif", "c.png");
     FileSystemStorageService mock = mock(FileSystemStorageService.class);
-    when(mock.listUploadedFiles()).thenReturn(uploadedFiles);
+    when(mock.listStoredFiles()).thenReturn(uploadedFiles);
     QuarkusMock.installMockForInstance(mock, fileSystemStorageService);
     given()
         .when()
@@ -40,7 +40,7 @@ public class FileStorageResourceTest {
   @Test
   public void testListingFilesWhenNoUploadedFiles() throws IOException {
     FileSystemStorageService mock = mock(FileSystemStorageService.class);
-    when(mock.listUploadedFiles()).thenReturn(new HashSet<>());
+    when(mock.listStoredFiles()).thenReturn(new HashSet<>());
     QuarkusMock.installMockForInstance(mock, fileSystemStorageService);
     given().when().get("/v1/files").then().statusCode(404);
   }
@@ -48,7 +48,7 @@ public class FileStorageResourceTest {
   @Test
   public void testListingFilesWithIOException() throws IOException {
     FileSystemStorageService mock = mock(FileSystemStorageService.class);
-    when(mock.listUploadedFiles()).thenThrow(new IOException());
+    when(mock.listStoredFiles()).thenThrow(new IOException());
     QuarkusMock.installMockForInstance(mock, fileSystemStorageService);
     given()
         .when()

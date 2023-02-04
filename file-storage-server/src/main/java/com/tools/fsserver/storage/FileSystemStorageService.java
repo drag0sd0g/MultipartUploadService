@@ -24,17 +24,28 @@ public class FileSystemStorageService implements IStorageService {
   private static final Logger LOG = Logger.getLogger(FileSystemStorageService.class);
   private final Path permanentStoragePath;
 
+  /**
+   * @param permanentStoragePath - Relative path to the folder containing all uploaded files. It is
+   *     read from the application.properties file, particularly from the fsserver.uploadedFilesPath
+   *     property. At server startup this folder is created if not already existing
+   * @throws IOException - if any I/O issues when checking existence of storage path or when
+   *     creating it
+   */
   @Inject
   public FileSystemStorageService(
       @ConfigProperty(name = "fsserver.uploadedFilesPath") String permanentStoragePath)
       throws IOException {
-    this.permanentStoragePath = Paths.get(permanentStoragePath);
-    if (Files.notExists(this.permanentStoragePath)) {
-      Files.createDirectories(this.permanentStoragePath);
-    }
+    Path pathToStorage = Paths.get(permanentStoragePath);
+    this.permanentStoragePath =
+        Files.notExists(pathToStorage) ? Files.createDirectories(pathToStorage) : pathToStorage;
+    LOG.info("FSServer permanent storage path is at " + this.permanentStoragePath.toAbsolutePath());
   }
 
-  public Set<String> listUploadedFiles() throws IOException {
+  /**
+   * @return Returns a set of file names from the storage path
+   * @throws IOException If any I/O issue occurs
+   */
+  public Set<String> listStoredFiles() throws IOException {
     try (Stream<Path> stream = Files.list(this.permanentStoragePath)) {
       Set<String> uploadedFileNames =
           stream
@@ -47,6 +58,14 @@ public class FileSystemStorageService implements IStorageService {
     }
   }
 
+  /**
+   * @param fileName - the final name of the uploaded file
+   * @param uploadSourcePath - the full path to the temp location where the multipart file has been
+   *     uploaded. It is usually uploaded under a quarkus-generated filename in the temp folder, so
+   *     we will need to copy it to the FSServer's main storage path under the provided fileName
+   * @throws FileNamePresentOnServerException - thrown if this file has already been uploaded
+   * @throws IOException - thrown if any I/O issue occurs
+   */
   public void storeFile(String fileName, Path uploadSourcePath)
       throws FileNamePresentOnServerException, IOException {
     java.nio.file.Path destinationPath = Paths.get(this.permanentStoragePath.toString(), fileName);
@@ -66,6 +85,13 @@ public class FileSystemStorageService implements IStorageService {
     LOG.debug("Uploaded file at path " + uploadedFinalPath.toAbsolutePath());
   }
 
+  /**
+   * @param fileNameToDelete - the name of the previously-uploaded file which we want to delete.
+   *     This parameter should not be a path, just a file name
+   * @throws FileNameNotPresentOnServerException - thrown if we want to delete a file which does not
+   *     exist on the server
+   * @throws IOException - thrown if any I/O issue occurs
+   */
   public void deleteFile(String fileNameToDelete)
       throws FileNameNotPresentOnServerException, IOException {
     java.nio.file.Path pathToFile =

@@ -13,6 +13,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * V1 of the /stats REST API. Exposes information about the server which potential clients may be
+ * interested in. For example maximum allowed file size for uploads. These operations are also
+ * visible in the Swagger UI at http://<server_host>:<server_port>/q/swagger-ui
+ */
 @Tag(
     name = "File Storage Server stats REST API",
     description = "provides server side information like file upload size limit")

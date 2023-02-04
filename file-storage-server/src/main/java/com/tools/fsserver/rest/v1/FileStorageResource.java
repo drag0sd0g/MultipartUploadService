@@ -18,6 +18,13 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * V1 of the /files REST API. Encapsulates a generic IStorageService to which it delegates storage
+ * of data in case of uploads, listing of stored files, deletions. Each operation of the REST API is
+ * annotated with all possible HTTP status code responses with respect to the provided input. In
+ * order to visualize the REST API docs, start up the server (as instructed in the README.md) and
+ * navigate to http://<server_host>:<server_port>/q/swagger-ui
+ */
 @Tag(
     name = "File Storage Server main REST API",
     description = "provides operations for uploading, deleting and listing uploaded files")
@@ -46,11 +53,11 @@ public class FileStorageResource {
     LOG.debug("Received request to list all uploaded files");
     try {
       String uploadedFileNamesCsv =
-          convertUploadedFileNamesToCsv(this.storageService.listUploadedFiles());
+          convertUploadedFileNamesToCsv(this.storageService.listStoredFiles());
       return uploadedFileNamesCsv.isEmpty()
           ? Response.status(Response.Status.NOT_FOUND).build()
           : Response.status(Response.Status.OK)
-              .entity(this.storageService.listUploadedFiles())
+              .entity(this.storageService.listStoredFiles())
               .build();
     } catch (IOException e) {
       String errMsg = "An error occurred when listing uploaded files.";

@@ -12,12 +12,14 @@ allprojects {
     version "1.0.0-SNAPSHOT"
 }
 
+//Ensure client jar is copied from nested build folder into top level one
 task copyClientDist(type: Copy) {
     dependsOn ':file-storage-client:jar'
     from "file-storage-client/build/libs/file-storage-client-1.0.0-SNAPSHOT.jar"
     into "${project.buildDir}/fsclient"
 }
 
+//Ensure server jar is copied from nested build folder into top level one
 task copyServerDist(type: Copy) {
     dependsOn ':file-storage-server:jar'
     from "file-storage-server/build/file-storage-server-1.0.0-SNAPSHOT.jar"

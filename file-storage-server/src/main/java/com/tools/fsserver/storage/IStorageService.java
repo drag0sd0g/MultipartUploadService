@@ -7,8 +7,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Set;
 
+/**
+ * Generic storage service interface permitting storage of files, deletion and listing stored files.
+ * There can be multiple implementations for this e.g. local file system, S3, NoSql, etc
+ */
 public interface IStorageService {
-  Set<String> listUploadedFiles() throws IOException;
+  Set<String> listStoredFiles() throws IOException;
 
   void storeFile(String persistingFileName, Path pathToFileToPersist)
       throws FileNamePresentOnServerException, IOException;
