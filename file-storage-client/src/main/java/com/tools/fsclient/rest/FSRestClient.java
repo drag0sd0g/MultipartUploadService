@@ -154,12 +154,10 @@ public class FSRestClient {
     return Paths.get(fileNameToUpload);
   }
 
-  @VisibleForTesting
   public String getServerFilesApi() {
     return serverFilesApi;
   }
 
-  @VisibleForTesting
   public String getServerStatsApi() {
     return serverStatsApi;
   }

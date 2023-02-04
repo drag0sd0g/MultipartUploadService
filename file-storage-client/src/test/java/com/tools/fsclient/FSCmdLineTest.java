@@ -25,6 +25,7 @@ public class FSCmdLineTest {
     when(mockConfigs.properties(any(File.class))).thenReturn(mockPropCfg);
     FSCmdLine fsCmdLine = new FSCmdLine(mockConfigs);
     assertEquals("http://localhost:8081/v1/files", fsCmdLine.getFsRestClient().getServerFilesApi());
+    assertEquals("http://localhost:8081/v1/stats", fsCmdLine.getFsRestClient().getServerStatsApi());
   }
 
   @Test
