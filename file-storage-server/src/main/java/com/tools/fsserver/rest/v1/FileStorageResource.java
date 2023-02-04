@@ -74,7 +74,9 @@ public class FileStorageResource {
     @APIResponse(responseCode = "200", description = "File uploaded successfully"),
     @APIResponse(responseCode = "400", description = "Request without a multipart 'payload' body"),
     @APIResponse(responseCode = "409", description = "Attempting to upload a duplicate"),
-    @APIResponse(responseCode = "413", description = "Attempting to upload a file larger than the size limit"),
+    @APIResponse(
+        responseCode = "413",
+        description = "Attempting to upload a file larger than the size limit"),
     @APIResponse(responseCode = "500", description = "Unexpected server error")
   })
   public Response uploadFile(

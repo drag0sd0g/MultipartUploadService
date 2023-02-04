@@ -5,6 +5,8 @@ buildscript {
     }
 }
 
+apply plugin:'base'
+
 allprojects {
     group "com.tools"
     version "1.0.0-SNAPSHOT"

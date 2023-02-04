@@ -5,6 +5,9 @@
 3. [Running the Server](#Running-the-Server)
    * [Server Notes](#Server-Notes)
 4. [Running the Client](#Running-the-Client)
+    * [Listing all uploaded files](#Listing-all-uploaded-files)
+    * [Uploading a file](#Uploading-a-file)
+    * [Deleting an uploaded file](#Deleting-an-uploaded-file)
     * [Client Notes](#Client-Notes)
 5. [Testing Notes](#Testing)
 
@@ -48,10 +51,39 @@ a HTTP 413 (CLI can fetch this limit via a **GET** to _/v1/stats/fileUploadSizeL
 
 ## Running the Client
 
-From a separate command line, navigate to *file-storage/build/fsclient* and then run
+From a separate command line, navigate to *file-storage/build/fsclient* and then run one of the three possible commands
+
+### Listing all uploaded files
+
+```shell script
+java -jar file-storage-client-1.0.0-SNAPSHOT.jar --list-files
+```
+or
 ```shell script
 java -jar file-storage-client-1.0.0-SNAPSHOT.jar -l
 ```
+
+### Uploading a file
+
+```shell script
+java -jar file-storage-client-1.0.0-SNAPSHOT.jar --upload-file <relative_or_absolute_path_to_file>
+```
+or
+```shell script
+java -jar file-storage-client-1.0.0-SNAPSHOT.jar -u <relative_or_absolute_path_to_file>
+```
+
+### Deleting an uploaded file
+
+```shell script
+java -jar file-storage-client-1.0.0-SNAPSHOT.jar --delete-file <file_name>
+```
+or
+```shell script
+java -jar file-storage-client-1.0.0-SNAPSHOT.jar -d <file_name>
+```
+
+For deletion, only file name is sufficient, no need to provide a path
 
 ### Client Notes
 - The client will expect certain command line options and/or arguments. If they are not provided, or provided wrongly 
@@ -75,5 +107,5 @@ java -Dfsserver.api.rootUrl="http://192.168.11.7:8085" -jar file-storage-client-
 ```
 
 ## Testing
-- Jacoco test coverage 79% in both server and CLI
+- Jacoco test coverage >75% in both server and CLI
 - Tested on macOS Ventura 13.1 and Windows 11 21H2

@@ -86,9 +86,7 @@ public class FileStorageResourceTest {
   public void testUploadingSameFileExpectConflict()
       throws IOException, FileNamePresentOnServerException {
     FileSystemStorageService mock = mock(FileSystemStorageService.class);
-    doThrow(new FileNamePresentOnServerException("file exists"))
-        .when(mock)
-        .storeFile(any(), any());
+    doThrow(new FileNamePresentOnServerException("file exists")).when(mock).storeFile(any(), any());
     QuarkusMock.installMockForInstance(mock, fileSystemStorageService);
     given()
         .contentType(MediaType.MULTIPART_FORM_DATA)

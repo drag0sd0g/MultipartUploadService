@@ -115,14 +115,14 @@ public class FSCmdLine {
 
   private void handleFileUploadCommand(CommandLine parsedCmdLine, Options options) {
     LOG.debug("Received command to upload a file");
-    String fileToUpload = parsedCmdLine.getOptionValue(OPTION_UPLOAD_FILE);
-    if (!checkIfFileToUploadExists(fileToUpload)) {
-      LOG.error("File {} doesn't exist. Please select a file which exists", fileToUpload);
+    String pathToFileToUpload = parsedCmdLine.getOptionValue(OPTION_UPLOAD_FILE);
+    if (!checkIfFileToUploadExists(pathToFileToUpload)) {
+      LOG.error("File {} doesn't exist. Please select a file which exists", pathToFileToUpload);
       HELP_FORMATTER.printHelp(
           FSCLIENT_EXECUTABLE, FSCLIENT_HELP_HEADER, options, FSCLIENT_HELP_FOOTER);
       return;
     }
-    this.fsRestClient.uploadFile(fileToUpload);
+    this.fsRestClient.uploadFile(pathToFileToUpload);
   }
 
   private void handleFileDeleteCommand(CommandLine parsedCmdLine) {
@@ -131,8 +131,8 @@ public class FSCmdLine {
   }
 
   @VisibleForTesting
-  boolean checkIfFileToUploadExists(String fileToUpload) {
-    Path pathToUploadFile = Paths.get(fileToUpload);
+  boolean checkIfFileToUploadExists(String pathToFileToUpload) {
+    Path pathToUploadFile = Paths.get(pathToFileToUpload);
     return Files.exists(pathToUploadFile);
   }
 
