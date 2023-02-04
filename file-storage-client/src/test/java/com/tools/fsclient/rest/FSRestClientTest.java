@@ -150,7 +150,7 @@ public class FSRestClientTest {
     doReturn(mockResponse).when(fsRestClient).serverCallToListUploadedFiles();
     Whitebox.setInternalState(FSRestClient.class, MOCKED_LOGGER, mockLogger);
     fsRestClient.listUploadedFiles();
-    verify(mockLogger).error(eq("No files have been uploaded yet"));
+    verify(mockLogger).warn(eq("No files have been uploaded yet"));
   }
 
   @Test

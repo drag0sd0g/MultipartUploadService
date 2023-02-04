@@ -42,7 +42,7 @@ public class FSRestClient {
       entity = httpResponse.getEntity();
       switch (httpResponse.getCode()) {
         case HttpStatus.SC_OK -> LOG.info("Currently uploaded files: {}", convertHttpEntityToString(entity));
-        case HttpStatus.SC_NOT_FOUND -> LOG.error("No files have been uploaded yet");
+        case HttpStatus.SC_NOT_FOUND -> LOG.warn("No files have been uploaded yet");
         case HttpStatus.SC_INTERNAL_SERVER_ERROR -> LOG.error("Unexpected server error when listing uploaded files. Please try again");
         default -> LOG.error("Unexpected error when listing uploaded files. Please try again");
       }

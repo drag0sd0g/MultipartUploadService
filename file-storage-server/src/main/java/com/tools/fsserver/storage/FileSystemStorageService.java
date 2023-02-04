@@ -2,6 +2,7 @@ package com.tools.fsserver.storage;
 
 import com.tools.fsserver.exception.FileNameNotPresentOnServerException;
 import com.tools.fsserver.exception.FileNamePresentOnServerException;
+import io.quarkus.runtime.Startup;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 
@@ -13,6 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Startup
 @ApplicationScoped
 public class FileSystemStorageService implements IStorageService {
 
