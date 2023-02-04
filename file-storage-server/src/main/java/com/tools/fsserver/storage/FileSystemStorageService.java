@@ -52,10 +52,9 @@ public class FileSystemStorageService implements IStorageService {
             + destinationPath.toAbsolutePath());
     Path uploadedFinalPath;
     try {
-      uploadedFinalPath =
-          Files.move(uploadSourcePath, destinationPath, StandardCopyOption.ATOMIC_MOVE);
+      uploadedFinalPath = Files.copy(uploadSourcePath, destinationPath);
     } catch (FileAlreadyExistsException faex) {
-      String errMsg = "There already exists a file called " + uploadSourcePath.getFileName();
+      String errMsg = "There already exists a file called " + destinationPath.getFileName();
       LOG.error(errMsg);
       throw new FileNamePresentOnServerException(errMsg);
     }
@@ -64,7 +63,8 @@ public class FileSystemStorageService implements IStorageService {
 
   public void deleteFile(String fileNameToDelete)
       throws FileNameNotPresentOnServerException, IOException {
-    java.nio.file.Path pathToFile = Paths.get(this.permanentStoragePath.toString(), fileNameToDelete);
+    java.nio.file.Path pathToFile =
+        Paths.get(this.permanentStoragePath.toString(), fileNameToDelete);
     LOG.debug("Attempting to delete uploaded file at location " + pathToFile);
     boolean deleted = Files.deleteIfExists(pathToFile);
     if (deleted) {

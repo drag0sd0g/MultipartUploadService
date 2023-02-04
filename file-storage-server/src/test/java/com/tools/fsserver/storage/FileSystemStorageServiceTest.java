@@ -30,16 +30,14 @@ public class FileSystemStorageServiceTest {
       paths.when(() -> Paths.get(eq(mockPathAsString))).thenReturn(mockPath);
       paths.when(() -> Paths.get(any(), any())).thenReturn(mockPath);
       files.when(() -> Files.notExists(eq(mockPath))).thenReturn(false);
-      files
-          .when(() -> Files.move(any(), any(), eq(StandardCopyOption.ATOMIC_MOVE)))
-          .thenReturn(mockPath);
+      files.when(() -> Files.copy(any(Path.class), any(Path.class))).thenReturn(mockPath);
       FileSystemStorageService storage = new FileSystemStorageService(mockPathAsString);
       try {
         storage.storeFile("fileName", mockPath);
       } catch (FileNamePresentOnServerException e) {
         fail("shouldn't have thrown FileNamePresentOnServerException");
       }
-      files.verify(() -> Files.move(any(), any(), eq(StandardCopyOption.ATOMIC_MOVE)));
+      files.verify(() -> Files.copy(any(Path.class), any(Path.class)));
     }
   }
 
