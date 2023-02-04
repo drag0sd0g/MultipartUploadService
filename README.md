@@ -32,15 +32,15 @@ java -jar file-storage-server-1.0.0-SNAPSHOT.jar
 ```
 ### Server Notes
 
-- By default, the server will start up at http://localhost:8080, you should be able to confirm that it's up by checking 
-its swagger page at http://localhost:8080/q/swagger-ui/ . You will also find the REST API documentation here with 
-the explanation for each status code returned by each endpoint
-- Several properties are kept in the _application.properties_ file under _src/main/resources_ but there are also plenty 
-default properties assumed by Quarkus. If you wish to override some of these (for example the port number or host), you can do 
-so by passing the override with _-D_ args to the jar e.g.
+- Several properties are kept in the _application.properties_ file under _src/main/resources_ but there are also plenty
+  default properties assumed by Quarkus. If you wish to override some of these (for example the port number or host), you can do
+  so by passing the override with _-D_ args to the jar e.g.
 ```shell script
 java -Dquarkus.http.host="192.168.11.7" -Dquarkus.http.port=8085 -jar file-storage-server-1.0.0-SNAPSHOT.jar
 ```
+- By default, the server will start up at http://localhost:8080, you should be able to confirm that it's up by checking 
+its swagger page at http://localhost:8080/q/swagger-ui/ . You will also find the REST API documentation here with 
+the explanation for each status code returned by each endpoint
 - By default, Quarkus framework stores _multipart/form-data_ files in a temporary location from where they will be copied to
 a designated persistent storage folder (called _data-server_). Quarkus automatically removes the files from the 
 temporary location after serving the request
@@ -86,6 +86,12 @@ java -jar file-storage-client-1.0.0-SNAPSHOT.jar -d <file_name>
 For deletion, only file name is sufficient, no need to provide a path
 
 ### Client Notes
+
+- By default, the client will attempt to find the server at http://localhost:8080. You can however choose to overwrite
+  this value by passing the JVM arg _-Dfsserver.api.rootUrl_ to the CLI executable e.g.
+```shell script
+java -Dfsserver.api.rootUrl="http://192.168.11.7:8085" -jar file-storage-client-1.0.0-SNAPSHOT.jar -l
+```
 - The client will expect certain command line options and/or arguments. If they are not provided, or provided wrongly 
 the CLI will exit and a usage guide will be printed as below:
 ```
@@ -99,11 +105,6 @@ To the usage command above, this CLI needs exactly one of the options:
  -u,--upload-file <arg>   Uploads the file provided as argument. The file
                           must exist locally and must have the size <= 10M
                           or else an error will be thrown
-```
-- By default, the client will attempt to find the server at http://localhost:8080. You can however choose to overwrite 
-this value by passing the JVM arg _-Dfsserver.api.rootUrl_ to the CLI executable e.g.
-```shell script
-java -Dfsserver.api.rootUrl="http://192.168.11.7:8085" -jar file-storage-client-1.0.0-SNAPSHOT.jar -l
 ```
 
 ## Testing
