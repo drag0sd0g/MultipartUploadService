@@ -12,6 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Tests for the CLI main entry point. The purpose of these tests is to ensure the input is
+ * correctly processed and that it successfully delegates to upload/delete/list HTTP calls to the
+ * server
+ */
 public class FSCmdLineTest {
 
   @Test
@@ -26,6 +31,24 @@ public class FSCmdLineTest {
     FSCmdLine fsCmdLine = new FSCmdLine(mockConfigs);
     assertEquals("http://localhost:8081/v1/files", fsCmdLine.getFsRestClient().getServerFilesApi());
     assertEquals("http://localhost:8081/v1/stats", fsCmdLine.getFsRestClient().getServerStatsApi());
+  }
+
+  @Test
+  public void testOverridingOfServerLocationWithSystemProperty() throws ConfigurationException {
+    Configurations mockConfigs = mock(Configurations.class);
+    PropertiesConfiguration mockPropCfg = mock(PropertiesConfiguration.class);
+    when(mockPropCfg.getString("fsserver.api.rootUrl")).thenReturn("http://localhost:8083");
+    when(mockPropCfg.getString("fsserver.api.version")).thenReturn("v1");
+    when(mockPropCfg.getString("fsserver.api.filesApi")).thenReturn("files");
+    when(mockPropCfg.getString("fsserver.api.statsApi")).thenReturn("stats");
+    when(mockConfigs.properties(any(File.class))).thenReturn(mockPropCfg);
+    System.setProperty("fsserver.api.rootUrl", "http://192.168.11.7:8085");
+    FSCmdLine fsCmdLine = new FSCmdLine(mockConfigs);
+    assertEquals(
+        "http://192.168.11.7:8085/v1/files", fsCmdLine.getFsRestClient().getServerFilesApi());
+    assertEquals(
+        "http://192.168.11.7:8085/v1/stats", fsCmdLine.getFsRestClient().getServerStatsApi());
+    System.clearProperty("fsserver.api.rootUrl");
   }
 
   @Test

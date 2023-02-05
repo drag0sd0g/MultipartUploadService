@@ -9,6 +9,10 @@ import static org.hamcrest.Matchers.containsString;
 @QuarkusTest
 public class FSServerStatsResourceTest {
 
+  /**
+   * FSServerStatsResource REST API test for verifying the correct reading (from the properties
+   * file) and returning of the fileUploadSizeLimit
+   */
   @Test
   public void testGettingFileUploadSizeLimit() {
     given()

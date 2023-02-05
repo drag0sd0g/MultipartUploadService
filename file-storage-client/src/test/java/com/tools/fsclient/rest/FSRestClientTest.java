@@ -12,6 +12,11 @@ import java.nio.file.Path;
 
 import static org.mockito.Mockito.*;
 
+/**
+ * Tests for the CLI's HTTP interaction with the server for each of the upload/delete/list
+ * scenarios. The HTTP interaction is mocked and the purpose of these tests is to verify that the
+ * HTTP statuses received from the server are translated to user-friendly messages
+ */
 public class FSRestClientTest {
 
   private static final String MOCKED_LOGGER = "LOG";

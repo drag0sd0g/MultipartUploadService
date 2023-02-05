@@ -17,6 +17,10 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.mock;
 
+/**
+ * Testing the FileSystemStorageService capabilities of storing/removing uploaded files The java NIO
+ * Paths/Files utility classes are mocked in order to not incur unnecessary I/O during testing
+ */
 public class FileSystemStorageServiceTest {
 
   @Test

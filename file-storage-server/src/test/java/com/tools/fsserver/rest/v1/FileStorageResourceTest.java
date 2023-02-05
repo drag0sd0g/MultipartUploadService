@@ -18,6 +18,11 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * REST test for each of the upload/delete/list API endpoints. Injecting a mocked
+ * FileSystemStorageService, we verify in each test that the correct HTTP status code is returned
+ * from FileStorageResource based on the mocked outcome of the operation
+ */
 @QuarkusTest
 public class FileStorageResourceTest {
 
