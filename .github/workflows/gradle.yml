@@ -1,17 +1,9 @@
 name: Clean Build
 
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
-permissions:
-  contents: read
+on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +12,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '14'
-        distribution: 'tamarin'
+        distribution: 'temurin'
     - name: Clean Build
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
