@@ -18,7 +18,6 @@ JDK 14 or newer, JAVA_HOME set to the JDK installation directory
 
 Run the following commands from the file-storage directory to build the binaries of both client and server.
 ```shell script
-chmod +x gradlew
 ./gradlew clean build distClient distServer
 ```
 
