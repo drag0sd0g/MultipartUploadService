@@ -16,9 +16,16 @@ JDK 14 or newer, JAVA_HOME set to the JDK installation directory
 
 ## Build & Packaging Instructions
 
-Run the following commands from the file-storage directory to build the binaries of both client and server.
-```shell script
-./gradlew clean build distClient distServer
+Run one the following commands from the **file-storage** root directory to build the binaries of both client and server.
+
+### On Windows
+```bat
+gradlew clean build distClient distServer
+```
+
+### On Unix
+```bash
+chmod +x gradlew && ./gradlew clean build distClient distServer
 ```
 
 Client and server jars will be deployed in the _file-storage/build_ folder under the folders _fsclient/_ and 
