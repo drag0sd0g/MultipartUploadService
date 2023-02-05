@@ -54,13 +54,13 @@ public class FSCmdLine {
   @VisibleForTesting
   FSCmdLine(Configurations configs) {
     try {
-      String rootUrlPassedAsEnvVar = System.getProperty(FSSERVER_ROOT_URL_PROP);
+      String rootUrlPassedSysProp = System.getProperty(FSSERVER_ROOT_URL_PROP);
       PropertiesConfiguration config = configs.properties(new File(FSCLIENT_PROPERTIES_FILE));
-      // allow overriding of the server's location if we pass one via env
+      // allow overriding of the server's location if we pass one system properties
       String serverApiRootUrl =
-          StringUtils.isEmpty(rootUrlPassedAsEnvVar)
+          StringUtils.isEmpty(rootUrlPassedSysProp)
               ? config.getString(FSSERVER_ROOT_URL_PROP)
-              : rootUrlPassedAsEnvVar;
+              : rootUrlPassedSysProp;
       LOG.info("Will be contacting FSServer at {}", serverApiRootUrl);
       String serverApiVersion = config.getString(FSSERVER_API_VERSION_PROP);
       String serverFilesApi = config.getString(FSSERVER_API_FILES);
@@ -74,6 +74,13 @@ public class FSCmdLine {
     }
   }
 
+  /**
+   * Main CLI processing logic: args are being parsed, based on which an HTTP call to the server is
+   * made for upload/deletion/listing. If any errors occur, the CLI usage guide is logged to console
+   * before exiting
+   *
+   * @param args - cmd line args
+   */
   @VisibleForTesting
   void processInputAndRun(String[] args) {
     Options options = buildOptions();

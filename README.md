@@ -108,5 +108,6 @@ To the usage command above, this CLI needs exactly one of the options:
 ```
 
 ## Testing
-- Jacoco test coverage >75% in both server and CLI
+- Jacoco reporting 80% test coverage in both server and CLI 
+(test reports visible in _file-storage/file-storage-<server|client>/build/jacocoHtml/index.html_)
 - Tested on macOS Ventura 13.1 and Windows 11 21H2

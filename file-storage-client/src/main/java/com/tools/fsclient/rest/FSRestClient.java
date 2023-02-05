@@ -33,6 +33,14 @@ public class FSRestClient {
     this.serverStatsApi = serverStatsApi;
   }
 
+  /**
+   * Makes an HTTP GET request to the storage server to fetch a list of all uploaded files.
+   * Based on the response's HTTP status code, it translates the outcome into a user-friendly log message.
+   * Expected server codes:
+   * 200 OK - list of uploaded files returned successfully
+   * 404 Not found - no uploaded files found on server
+   * 500 Internal Server Error - something went wrong server-side when fetching uploaded files
+   */
   public void listUploadedFiles() {
     LOG.debug("Requesting list of all uploaded files");
     BasicClassicHttpResponse httpResponse = null;
@@ -57,6 +65,19 @@ public class FSRestClient {
     }
   }
 
+  /**
+   * Makes an HTTP POST request to the storage server to upload a local file.
+   * Based on the response's HTTP status code, it translates the outcome into a user-friendly log message.
+   * Expected server codes:
+   * 200 OK - file uploaded successfully
+   * 400 Bad Request - Mandatory 'payload' multipart body missing from the request
+   * 413 Request Entity Too Large - file size exceeds the server-set boundary
+   * 409 Conflict - duplicate upload detected
+   * 500 Internal Server Error - something went wrong server-side during upload
+   *
+   * @param fileNameToUpload - The file we want to upload - this must exist locally and be within the
+   *                         size limit mandated by the server
+   */
   public void uploadFile(String fileNameToUpload) {
     LOG.debug("Requesting to upload the file {}", fileNameToUpload);
     Path fileToUpload = resolvePathToUploadFile(fileNameToUpload);
@@ -82,16 +103,27 @@ public class FSRestClient {
     }
   }
 
-  public void deleteFile(String file) {
-    LOG.debug("Requesting for deletion {}", file);
+  /**
+   * Makes an HTTP DELETE request to the storage server to delete a previously-uploaded file
+   * Based on the response's HTTP status code, it translates the outcome into a user-friendly log message.
+   * Expected server codes:
+   * 200 OK - file deleted successfully
+   * 404 Not found - provided file for deletion was not found on server
+   * 500 Internal Server Error - something went wrong server-side during deletion
+   *
+   * @param fileNameToDelete - The name of the previously-uploaded file we want to delete. (This file doesn't need to be
+   *                         physically present locally)
+   */
+  public void deleteFile(String fileNameToDelete) {
+    LOG.debug("Requesting for deletion {}", fileNameToDelete);
     BasicClassicHttpResponse httpResponse = null;
     try {
-      httpResponse = serverCallToDeleteFile(file);
+      httpResponse = serverCallToDeleteFile(fileNameToDelete);
       switch (httpResponse.getCode()) {
-        case HttpStatus.SC_OK -> LOG.info("Successfully deleted file {}", file);
-        case HttpStatus.SC_NOT_FOUND -> LOG.error("Did not delete anything. File {} is not present on server", file);
-        case HttpStatus.SC_INTERNAL_SERVER_ERROR -> LOG.error("Unexpected server error when deleting file {}. Please try again", file);
-        default -> LOG.error("Unexpected error when deleting file {}. Please try again", file);
+        case HttpStatus.SC_OK -> LOG.info("Successfully deleted file {}", fileNameToDelete);
+        case HttpStatus.SC_NOT_FOUND -> LOG.error("Did not delete anything. File {} is not present on server", fileNameToDelete);
+        case HttpStatus.SC_INTERNAL_SERVER_ERROR -> LOG.error("Unexpected server error when deleting file {}. Please try again", fileNameToDelete);
+        default -> LOG.error("Unexpected error when deleting file {}. Please try again", fileNameToDelete);
       }
     } catch (IOException e) {
       LOG.error("Error deleting file. Please try again");
@@ -104,6 +136,11 @@ public class FSRestClient {
     }
   }
 
+  /**
+   * Makes an HTTP GET to the server's /stats/fileUploadSizeLimit API to fetch and cache the upload size limit
+   * for a file
+   * @return The file size limit that can be uploaded to the server
+   */
   public String getFileUploadSizeLimit(){
     if (StringUtils.isEmpty(this.cachedFileUploadSizeLimit)) { //only fetch if not cached already
       try {
