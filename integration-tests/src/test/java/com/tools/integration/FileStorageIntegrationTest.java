@@ -209,13 +209,14 @@ public class FileStorageIntegrationTest {
     @Order(8)
     @DisplayName("Unhappy Path: Should fail to upload file without payload")
     public void testUploadWithoutPayload() {
+        // Posting without multipart payload should return 400 or 500
         given()
                 .contentType("multipart/form-data")
                 .pathParam("fileName", "no-payload-test.txt")
                 .when()
                 .post("/v1/files/{fileName}")
                 .then()
-                .statusCode(anyOf(is(400), is(405), is(500)));
+                .statusCode(anyOf(is(400), is(500)));
     }
 
     @Test
