@@ -31,8 +31,8 @@ RUN mkdir -p /app/data-server && \
 
 USER appuser
 
-# Copy the built jar
-COPY --from=builder --chown=appuser:appgroup /workspace/file-storage-server/build/file-storage-server-1.0.0-SNAPSHOT.jar /app/app.jar
+# Copy the built jar (Quarkus creates a -runner.jar)
+COPY --from=builder --chown=appuser:appgroup /workspace/file-storage-server/build/file-storage-server-1.0.0-SNAPSHOT-runner.jar /app/app.jar
 
 # Expose the default Quarkus port
 EXPOSE 8080

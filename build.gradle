@@ -68,7 +68,10 @@ task distClient(type: Copy) {
 
 //Ensure server jar is copied from nested build folder into top level one
 task distServer(type: Copy) {
-    dependsOn ':file-storage-server:jar'
-    from "file-storage-server/build/file-storage-server-1.0.0-SNAPSHOT.jar"
+    dependsOn ':file-storage-server:quarkusBuild'
+    from "file-storage-server/build/file-storage-server-1.0.0-SNAPSHOT-runner.jar"
     into "${project.buildDir}/fsserver"
+    rename { String fileName ->
+        fileName.replace('-runner', '')
+    }
 }
