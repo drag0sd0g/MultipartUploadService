@@ -6,7 +6,6 @@ services:
     build:
       context: .
       dockerfile: file-storage-server/Dockerfile
-    container_name: file-storage-server
     ports:
       - "8080:8080"
     environment:
@@ -28,7 +27,6 @@ services:
     build:
       context: .
       dockerfile: file-storage-client/Dockerfile
-    container_name: file-storage-client
     environment:
       - FSSERVER_API_ROOTURL=http://server:8080
     depends_on:
