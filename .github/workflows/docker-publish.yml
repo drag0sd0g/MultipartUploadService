@@ -11,6 +11,10 @@ on:
     branches:
       - main
       - master
+  workflow_run:
+    workflows: ["CodeQL Security Scan"]
+    types:
+      - completed
 
 env:
   REGISTRY: ghcr.io
@@ -20,6 +24,11 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    # Only run if CodeQL workflow succeeded or if triggered directly
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success' ||
+      (github.event_name == 'push' && contains(github.ref, 'tags'))
     permissions:
       contents: read
       packages: write

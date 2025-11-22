@@ -7,11 +7,20 @@ on:
     branches: [ main, master, develop ]
   schedule:
     - cron: '0 0 * * 1' # Run weekly on Mondays
+  workflow_run:
+    workflows: ["Clean Build"]
+    types:
+      - completed
 
 jobs:
   analyze:
     name: Analyze Code
     runs-on: ubuntu-latest
+    # Only run if the build workflow succeeded or if triggered by schedule/manual
+    if: |
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
     permissions:
       actions: read
       contents: read

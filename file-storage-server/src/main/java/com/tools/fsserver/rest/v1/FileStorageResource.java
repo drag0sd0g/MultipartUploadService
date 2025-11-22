@@ -113,7 +113,6 @@ public class FileStorageResource {
 
   @DELETE
   @Path("{fileName}")
-  @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Produces(MediaType.TEXT_PLAIN)
   @Operation(summary = "Deletes a file from data-server folder")
   @APIResponses({
