@@ -2,7 +2,13 @@ package com.tools.integration;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,8 +17,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Duration;
 
@@ -202,7 +212,7 @@ public class FileStorageIntegrationTest {
                 .extract().asString();
 
         // Should contain both files
-        Assertions.assertTrue(response.contains("test-upload") || response.contains("test-second"));
+        assertTrue(response.contains("test-upload") || response.contains("test-second"));
     }
 
     @Test

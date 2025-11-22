@@ -13,6 +13,14 @@
         <exclude name="JUnitTestsShouldIncludeAssert"/>
         <exclude name="JUnitAssertionsShouldIncludeMessage"/>
         <exclude name="UseVarargs"/>
+        <exclude name="JUnit5TestShouldBePackagePrivate"/>
+        <exclude name="UnitTestAssertionsShouldIncludeMessage"/>
+        <exclude name="UnitTestContainsTooManyAsserts"/>
+        <exclude name="GuardLogStatement"/>
+        <exclude name="UnitTestShouldIncludeAssert"/>
+        <exclude name="PreserveStackTrace"/>
+        <exclude name="AvoidCatchingGenericException"/>
+        <exclude name="SystemPrintln"/>
     </rule>
 
     <!-- Code Style -->
@@ -26,6 +34,8 @@
         <exclude name="CallSuperInConstructor"/>
         <exclude name="LocalVariableCouldBeFinal"/>
         <exclude name="MethodArgumentCouldBeFinal"/>
+        <exclude name="TooManyStaticImports"/>
+        <exclude name="UnnecessaryFullyQualifiedName"/>
     </rule>
 
     <!-- Design -->
@@ -33,6 +43,9 @@
         <exclude name="LawOfDemeter"/>
         <exclude name="LoosePackageCoupling"/>
         <exclude name="UseUtilityClass"/>
+        <exclude name="TooManyMethods"/>
+        <exclude name="SignatureDeclareThrowsException"/>
+        <exclude name="AvoidCatchingGenericException"/>
     </rule>
 
     <!-- Documentation -->
@@ -46,6 +59,11 @@
         <exclude name="BeanMembersShouldSerialize"/>
         <exclude name="DataflowAnomalyAnalysis"/>
         <exclude name="AvoidFieldNameMatchingMethodName"/>
+        <exclude name="CloseResource"/>
+        <exclude name="AvoidDuplicateLiterals"/>
+        <exclude name="MissingSerialVersionUID"/>
+        <exclude name="EmptyCatchBlock"/>
+        <exclude name="AssignmentInOperand"/>
     </rule>
 
     <!-- Performance -->

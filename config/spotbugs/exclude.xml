@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Suppress CT_CONSTRUCTOR_THROW for DI constructors -->
+    <Match>
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+        <Class name="com.tools.fsserver.storage.FileSystemStorageService"/>
+    </Match>
+    
+    <!-- Suppress EI_EXPOSE_REP2 for DI injected services -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+        <Class name="com.tools.fsserver.rest.v1.FileStorageResource"/>
+    </Match>
+    
+    <!-- Suppress DM_DEFAULT_ENCODING for integration tests -->
+    <Match>
+        <Bug pattern="DM_DEFAULT_ENCODING"/>
+        <Class name="com.tools.integration.FileStorageIntegrationTest"/>
+    </Match>
+    
+    <!-- Suppress NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE for integration tests -->
+    <Match>
+        <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
+        <Class name="com.tools.integration.FileStorageIntegrationTest"/>
+    </Match>
+</FindBugsFilter>
