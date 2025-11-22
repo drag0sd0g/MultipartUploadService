@@ -5,11 +5,53 @@ buildscript {
     }
 }
 
+plugins {
+    id 'checkstyle'
+    id 'pmd'
+    id 'com.github.spotbugs' version '6.0.26' apply false
+}
+
 apply plugin:'base'
 
 allprojects {
     group "com.tools"
     version "1.0.0-SNAPSHOT"
+    
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'checkstyle'
+    apply plugin: 'pmd'
+    apply plugin: 'com.github.spotbugs'
+
+    checkstyle {
+        toolVersion = '10.20.2'
+        configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
+        ignoreFailures = false
+        maxWarnings = 0
+    }
+
+    pmd {
+        toolVersion = '7.8.0'
+        ruleSetFiles = files("${rootProject.projectDir}/config/pmd/pmd-ruleset.xml")
+        ignoreFailures = false
+        ruleSets = []
+    }
+
+    spotbugs {
+        toolVersion = '4.8.6'
+        ignoreFailures = false
+    }
+    
+    tasks.withType(com.github.spotbugs.snom.SpotBugsTask).configureEach {
+        reports {
+            html.required = true
+            xml.required = false
+        }
+    }
 }
 
 //Ensure client jar is copied from nested build folder into top level one
