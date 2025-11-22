@@ -341,7 +341,7 @@ docker-compose logs -f
 
 ## 📄 ライセンス
 
-このプロジェクトは Apache License 2.0 の下でライセンスされています。詳細は LICENSE ファイルを参照してください。
+このプロジェクトは MIT License の下でライセンスされています。詳細は LICENSE ファイルを参照してください。
 
 ---
 
