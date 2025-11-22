@@ -17,7 +17,6 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 
 public class FSRestClient {
 
@@ -41,27 +40,25 @@ public class FSRestClient {
    * 404 Not found - no uploaded files found on server
    * 500 Internal Server Error - something went wrong server-side when fetching uploaded files
    */
+  @SuppressWarnings("PMD.CloseResource") // Entity is consumed by EntityUtils in finally block
   public void listUploadedFiles() {
     LOG.debug("Requesting list of all uploaded files");
-    BasicClassicHttpResponse httpResponse = null;
-    HttpEntity entity = null;
-    try {
-      httpResponse = serverCallToListUploadedFiles();
-      entity = httpResponse.getEntity();
+    try (BasicClassicHttpResponse httpResponse = serverCallToListUploadedFiles()) {
       switch (httpResponse.getCode()) {
-        case HttpStatus.SC_OK -> LOG.info("Currently uploaded files: {}", convertHttpEntityToString(entity));
+        case HttpStatus.SC_OK -> {
+          HttpEntity entity = httpResponse.getEntity();
+          try {
+            LOG.info("Currently uploaded files: {}", convertHttpEntityToString(entity));
+          } finally {
+            EntityUtils.consume(entity);
+          }
+        }
         case HttpStatus.SC_NOT_FOUND -> LOG.warn("No files have been uploaded yet");
         case HttpStatus.SC_INTERNAL_SERVER_ERROR -> LOG.error("Unexpected server error when listing uploaded files. Please try again");
         default -> LOG.error("Unexpected error when listing uploaded files. Please try again");
       }
     } catch (IOException | ParseException e) {
       LOG.error("Error fetching list of all uploaded files. Please try again");
-    } finally {
-      try {
-        cleanUpHttpResourcesIfNecessary(entity, httpResponse);
-      } catch (IOException e) {
-        LOG.error("Error fetching list of all uploaded files. Please try again");
-      }
     }
   }
 
@@ -81,25 +78,20 @@ public class FSRestClient {
   public void uploadFile(String fileNameToUpload) {
     LOG.debug("Requesting to upload the file {}", fileNameToUpload);
     Path fileToUpload = resolvePathToUploadFile(fileNameToUpload);
-    BasicClassicHttpResponse httpResponse = null;
-    try {
-      httpResponse = serverCallToUploadFile(fileToUpload);
+    try (BasicClassicHttpResponse httpResponse = serverCallToUploadFile(fileToUpload)) {
       switch (httpResponse.getCode()) {
         case HttpStatus.SC_OK -> LOG.info("Successfully uploaded file {}", fileNameToUpload);
         case HttpStatus.SC_BAD_REQUEST -> LOG.error("Upload error. Missing 'payload' from multipart body");
         case HttpStatus.SC_CONFLICT -> LOG.error("Upload error. {} already exists on server", fileNameToUpload);
-        case HttpStatus.SC_REQUEST_TOO_LONG -> LOG.error("{} is larger than size limit of {}. Please try again with smaller files", fileNameToUpload, getFileUploadSizeLimit());
+        case HttpStatus.SC_REQUEST_TOO_LONG -> LOG.error(
+                "{} is larger than size limit of {}. Please try again with smaller files",
+                fileNameToUpload,
+                getFileUploadSizeLimit());
         case HttpStatus.SC_INTERNAL_SERVER_ERROR -> LOG.error("Unexpected server error when uploading file {}. Please try again", fileNameToUpload);
         default -> LOG.error("Unexpected error when uploading file {}. Please try again", fileNameToUpload);
       }
     } catch (IOException e) {
       LOG.error("Error uploading file. Please try again");
-    } finally {
-      try {
-        cleanUpHttpResourcesIfNecessary(null, httpResponse);
-      } catch (IOException e) {
-        LOG.error("Error uploading file. Please try again");
-      }
     }
   }
 
@@ -116,9 +108,7 @@ public class FSRestClient {
    */
   public void deleteFile(String fileNameToDelete) {
     LOG.debug("Requesting for deletion {}", fileNameToDelete);
-    BasicClassicHttpResponse httpResponse = null;
-    try {
-      httpResponse = serverCallToDeleteFile(fileNameToDelete);
+    try (BasicClassicHttpResponse httpResponse = serverCallToDeleteFile(fileNameToDelete)) {
       switch (httpResponse.getCode()) {
         case HttpStatus.SC_OK -> LOG.info("Successfully deleted file {}", fileNameToDelete);
         case HttpStatus.SC_NOT_FOUND -> LOG.error("Did not delete anything. File {} is not present on server", fileNameToDelete);
@@ -127,12 +117,6 @@ public class FSRestClient {
       }
     } catch (IOException e) {
       LOG.error("Error deleting file. Please try again");
-    } finally {
-      try {
-        cleanUpHttpResourcesIfNecessary(null, httpResponse);
-      } catch (IOException e) {
-        LOG.error("Error deleting file. Please try again");
-      }
     }
   }
 
@@ -141,7 +125,7 @@ public class FSRestClient {
    * for a file
    * @return The file size limit that can be uploaded to the server
    */
-  public String getFileUploadSizeLimit(){
+  public String getFileUploadSizeLimit() {
     if (StringUtils.isEmpty(this.cachedFileUploadSizeLimit)) { //only fetch if not cached already
       try {
         this.cachedFileUploadSizeLimit = Request.get(this.serverStatsApi + "/" + FILE_UPLOAD_SIZE_LIMIT_ENDPOINT)
@@ -187,7 +171,7 @@ public class FSRestClient {
   }
 
   @VisibleForTesting
-  Path resolvePathToUploadFile(String fileNameToUpload){
+  Path resolvePathToUploadFile(String fileNameToUpload) {
     return Paths.get(fileNameToUpload);
   }
 
@@ -197,15 +181,5 @@ public class FSRestClient {
 
   public String getServerStatsApi() {
     return serverStatsApi;
-  }
-
-  private void cleanUpHttpResourcesIfNecessary(
-          HttpEntity httpEntity, BasicClassicHttpResponse httpResponse) throws IOException {
-    if (!Objects.isNull(httpEntity)) {
-      EntityUtils.consume(httpEntity);
-    }
-    if (!Objects.isNull(httpResponse)) {
-      httpResponse.close();
-    }
   }
 }

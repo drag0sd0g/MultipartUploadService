@@ -30,20 +30,20 @@ subprojects {
     checkstyle {
         toolVersion = '10.20.2'
         configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
-        ignoreFailures = true
+        ignoreFailures = false
         maxWarnings = 0
     }
 
     pmd {
         toolVersion = '7.8.0'
         ruleSetFiles = files("${rootProject.projectDir}/config/pmd/pmd-ruleset.xml")
-        ignoreFailures = true
+        ignoreFailures = false
         ruleSets = []
     }
 
     spotbugs {
         toolVersion = '4.8.6'
-        ignoreFailures = true
+        ignoreFailures = false
     }
     
     tasks.withType(com.github.spotbugs.snom.SpotBugsTask).configureEach {
