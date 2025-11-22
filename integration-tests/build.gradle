@@ -25,6 +25,8 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    // Skip by default - requires Docker to run
+    enabled = project.hasProperty('runIntegrationTests')
     testLogging {
         events "passed", "skipped", "failed"
         exceptionFormat "full"
