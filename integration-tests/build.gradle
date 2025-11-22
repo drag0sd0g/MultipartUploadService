@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.11.3'
+    testImplementation 'io.rest-assured:rest-assured:5.5.0'
+    testImplementation 'org.awaitility:awaitility:4.2.2'
+    testImplementation 'ch.qos.logback:logback-classic:1.5.12'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.3'
+}
+
+test {
+    useJUnitPlatform()
+    // Integration tests enabled by default - requires Docker
+    // Depends on server jar being built
+    dependsOn ':file-storage-server:quarkusBuild'
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+        showStandardStreams = true
+    }
+    // Increase timeout for container startup
+    systemProperty "junit.jupiter.execution.timeout.default", "5m"
+}

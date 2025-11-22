@@ -2,3 +2,17 @@
 .idea
 build
 data-server
+*.class
+*.log
+*.jar
+*.war
+*.ear
+.DS_Store
+*.swp
+*.bak
+*~
+.vscode/
+*.iml
+out/
+target/
+bin/
