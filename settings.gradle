@@ -11,4 +11,5 @@ pluginManagement {
 rootProject.name='file-storage'
 include 'file-storage-server'
 include 'file-storage-client'
+include 'integration-tests'
 
