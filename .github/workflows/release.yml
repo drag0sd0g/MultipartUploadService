@@ -38,7 +38,7 @@ jobs:
     - name: Get version from build.gradle
       id: get_version
       run: |
-        VERSION=$(grep "version" build.gradle | head -1 | awk -F'"' '{print $2}')
+        VERSION=$(grep '^\s*version' build.gradle | head -1 | awk -F'"' '{print $2}')
         echo "version=$VERSION" >> $GITHUB_OUTPUT
         echo "Version: $VERSION"
 
