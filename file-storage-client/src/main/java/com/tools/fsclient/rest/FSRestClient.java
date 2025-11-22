@@ -40,7 +40,6 @@ public class FSRestClient {
    * 404 Not found - no uploaded files found on server
    * 500 Internal Server Error - something went wrong server-side when fetching uploaded files
    */
-  @SuppressWarnings("PMD.CloseResource") // Entity is consumed by EntityUtils in finally block
   public void listUploadedFiles() {
     LOG.debug("Requesting list of all uploaded files");
     try (BasicClassicHttpResponse httpResponse = serverCallToListUploadedFiles()) {
@@ -146,7 +145,11 @@ public class FSRestClient {
             .addBinaryBody(MULTIPART_UPLOAD_PAYLOAD_NAME, fileToUpload.toAbsolutePath().toFile())
             .build();
     //This encoding ensures we deal with file names which may contain spaces
-    String encodedFileName = URLEncoder.encode(fileToUpload.getFileName().toString(), Charset.defaultCharset());
+    Path fileName = fileToUpload.getFileName();
+    if (fileName == null) {
+      throw new IOException("Unable to determine file name from path: " + fileToUpload);
+    }
+    String encodedFileName = URLEncoder.encode(fileName.toString(), Charset.defaultCharset());
     return  (BasicClassicHttpResponse) Request.post(this.serverFilesApi + "/" + encodedFileName)
                             .body(multiPartEntity)
                             .useExpectContinue()

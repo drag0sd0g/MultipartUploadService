@@ -44,6 +44,7 @@ subprojects {
     spotbugs {
         toolVersion = '4.8.6'
         ignoreFailures = false
+        excludeFilter = file("${rootProject.projectDir}/config/spotbugs/exclude.xml")
     }
     
     tasks.withType(com.github.spotbugs.snom.SpotBugsTask).configureEach {
