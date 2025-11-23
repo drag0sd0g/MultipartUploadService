@@ -76,6 +76,8 @@ pitest {
     coverageThreshold = 70
 }
 
+// PITest needs to run after Quarkus generates its sources, otherwise it may try to
+// analyze classes before they are fully available, leading to incorrect results
 tasks.named('pitest') {
     mustRunAfter tasks.named('compileQuarkusGeneratedSourcesJava')
 }
