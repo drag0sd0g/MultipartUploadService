@@ -32,7 +32,7 @@ A modern, containerized file storage service with REST API, built with Quarkus a
 - 📊 **Observability**: Prometheus metrics and structured logging
 - 🔒 **Security**: CodeQL scanning and dependency updates via Dependabot
 - ✅ **Quality**: Checkstyle, PMD, and SpotBugs static analysis
-- 🧪 **Tested**: 80% code coverage + comprehensive integration tests
+- 🧪 **Tested**: 70% code coverage + comprehensive integration tests + PIT mutation testing
 - 📖 **API Documentation**: OpenAPI/Swagger UI included
 - 🌐 **REST API**: Simple, well-documented file storage API
 
@@ -306,8 +306,12 @@ docker-compose logs -f
 
 - **Unit Tests**: JUnit 5 with Mockito
 - **Integration Tests**: Testcontainers + Docker Compose
-- **Code Coverage**: Jacoco reporting with 80% threshold
+- **Code Coverage**: Jacoco reporting with 70% threshold
   - Test reports visible in _build/jacocoHtml/index.html_
+- **Mutation Testing**: PIT (PITest) with enforced thresholds
+  - Client: 40% mutation score threshold
+  - Server: 70% mutation score threshold
+  - Reports visible in _build/reports/pitest/index.html_
 - **Continuous Integration**: GitHub Actions with automated testing
 
 Run all tests:
@@ -322,6 +326,16 @@ Run with coverage:
 ./gradlew clean build
 # View coverage report: open file-storage-server/build/jacocoHtml/index.html
 ```
+
+Run mutation testing:
+
+```bash
+./gradlew pitest
+# View client report: open file-storage-client/build/reports/pitest/index.html
+# View server report: open file-storage-server/build/reports/pitest/index.html
+```
+
+**Note**: Mutation testing is automatically run as part of the build. The build will fail if mutation scores drop below the configured thresholds.
 
 ---
 

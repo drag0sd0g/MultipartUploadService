@@ -2,6 +2,7 @@
 .idea
 build
 data-server
+data-server-test
 *.class
 *.log
 *.jar

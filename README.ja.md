@@ -32,7 +32,7 @@ Quarkus と Java 21 で構築された、モダンでコンテナ化されたフ
 - 📊 **オブザーバビリティ**: Prometheus メトリクスと構造化ログ
 - 🔒 **セキュリティ**: CodeQL スキャンと Dependabot による依存関係更新
 - ✅ **品質管理**: Checkstyle、PMD、SpotBugs による静的解析
-- 🧪 **テスト済み**: 80% コードカバレッジ + 包括的な統合テスト
+- 🧪 **テスト済み**: 70% コードカバレッジ + 包括的な統合テスト + PIT ミューテーションテスト
 - 📖 **API ドキュメント**: OpenAPI/Swagger UI 同梱
 - 🌐 **REST API**: シンプルで分かりやすいファイルストレージ API
 
@@ -300,8 +300,12 @@ docker-compose logs -f
 
 - **ユニットテスト**: JUnit 5 + Mockito
 - **統合テスト**: Testcontainers + Docker Compose
-- **コードカバレッジ**: Jacoco レポート、80% 閾値設定
+- **コードカバレッジ**: Jacoco レポート、70% 閾値設定
   - テストレポートは _build/jacocoHtml/index.html_ に出力
+- **ミューテーションテスト**: PIT (PITest) による強制的な閾値設定
+  - クライアント: 40% ミューテーションスコア閾値
+  - サーバー: 70% ミューテーションスコア閾値
+  - レポートは _build/reports/pitest/index.html_ に出力
 - **継続的インテグレーション**: GitHub Actions による自動テスト
 
 全てのテストを実行：
@@ -316,6 +320,16 @@ docker-compose logs -f
 ./gradlew clean build
 # カバレッジレポートを表示: file-storage-server/build/jacocoHtml/index.html を開く
 ```
+
+ミューテーションテストを実行：
+
+```bash
+./gradlew pitest
+# クライアントレポートを表示: file-storage-client/build/reports/pitest/index.html を開く
+# サーバーレポートを表示: file-storage-server/build/reports/pitest/index.html を開く
+```
+
+**注意**: ミューテーションテストはビルドの一部として自動的に実行されます。ミューテーションスコアが設定された閾値を下回ると、ビルドは失敗します。
 
 ---
 
