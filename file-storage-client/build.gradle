@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'info.solidsoft.pitest' version '1.15.0'
 }
 
 apply plugin: 'jacoco'
@@ -63,4 +64,20 @@ jacocoTestCoverageVerification {
             }
         }
     }
+}
+
+pitest {
+    junit5PluginVersion = '1.2.1'
+    targetClasses = ['com.tools.fsclient.*']
+    targetTests = ['com.tools.fsclient.*']
+    mutators = ['DEFAULTS']
+    threads = 4
+    outputFormats = ['HTML', 'XML']
+    timestampedReports = false
+    mutationThreshold = 40
+    coverageThreshold = 70
+}
+
+tasks.named('check') {
+    dependsOn tasks.named('pitest')
 }

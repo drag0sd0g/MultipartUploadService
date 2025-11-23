@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'io.quarkus'
+    id 'info.solidsoft.pitest' version '1.15.0'
 }
 
 apply plugin: 'jacoco'
@@ -61,4 +62,24 @@ jacocoTestCoverageVerification {
             }
         }
     }
+}
+
+pitest {
+    junit5PluginVersion = '1.2.1'
+    targetClasses = ['com.tools.fsserver.*']
+    targetTests = ['com.tools.fsserver.*']
+    mutators = ['DEFAULTS']
+    threads = 4
+    outputFormats = ['HTML', 'XML']
+    timestampedReports = false
+    mutationThreshold = 70
+    coverageThreshold = 70
+}
+
+tasks.named('pitest') {
+    mustRunAfter tasks.named('compileQuarkusGeneratedSourcesJava')
+}
+
+tasks.named('check') {
+    dependsOn tasks.named('pitest')
 }
