@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'commons-cli:commons-cli:1.9.0'
+    implementation 'commons-cli:commons-cli:1.11.0'
     implementation 'commons-beanutils:commons-beanutils:1.9.4'
     implementation 'org.apache.commons:commons-configuration2:2.11.0'
     implementation 'org.apache.httpcomponents.client5:httpclient5:5.4.1'
